@@ -1,0 +1,104 @@
+from abc import ABC
+from abc import abstractmethod
+
+class PlayFactory(ABC):
+
+    @abstractmethod
+    def create_player(self, name):
+        pass
+
+    @abstractmethod
+    def create_weapon(self):
+        pass
+
+
+
+class PoliceFactory(PlayFactory):
+
+    def create_player(self, name):
+        return Policeman(name)
+
+    def create_weapon(self):
+        return Diagle()
+
+
+
+class TerroristFacrory(PlayFactory):
+
+    def create_player(self, name):
+        return Terrorist(name)
+
+    def create_weapon(self):
+        return Glock()
+
+
+
+class Policeman:
+
+    def __init__(self, name):
+        self.name = name
+        self.weapon = None
+
+    def add_weapon(self, weapon):
+        self.weapon = weapon
+
+    def shoot(self):
+        print(f'{Policeman.__name__} shoot from {self.weapon.pistol()}')
+
+    def kill(self, name_terrorist):
+        print(f'{Policeman.__name__} killed {name_terrorist}')
+
+
+
+class Terrorist(Policeman):
+
+    def shoot(self):
+        print(f'{Terrorist.__name__} shoot from {self.weapon.pistol()}')
+
+    def kill(self, name_policeman):
+        print(f'{Terrorist.__name__} killed {name_policeman}')
+
+
+class Diagle:
+    __pistol = 'Deagle'
+
+    def pistol(self):
+        return self.__pistol
+
+
+class Glock:
+    __pistol = 'Glock'
+
+    def pistol(self):
+        return self.__pistol
+
+
+class Creator:
+
+    @staticmethod
+    def create_skin(factory, name):
+        player = factory.create_player(name)
+        weapon = factory.create_weapon()
+
+        player.add_weapon(weapon)
+
+        return player
+
+if __name__ == '__main__':
+
+    terrorist = Creator.create_skin(TerroristFacrory(), 'Putin')
+    policeman = Creator.create_skin(PoliceFactory(), 'Stelmakh')
+
+    terrorist.shoot()
+    policeman.shoot()
+    policeman.kill(terrorist.name)
+
+
+
+
+
+
+
+
+
+
